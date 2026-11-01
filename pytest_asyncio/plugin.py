@@ -389,9 +389,10 @@ def _cancelled_fixture_error(
     """
     Return the error to raise instead of a fixture's CancelledError.
 
-    CancelledError is a BaseException, so pytest does not handle it like other
-    fixture errors: it does not cache it as a setup error, and it does not run
-    a node's remaining finalizers after one is raised during teardown.
+    CancelledError is not an Exception subclass, so pytest does not
+    handle it like other fixture errors: it does not cache it as a setup
+    error, and it does not run a node's remaining finalizers after one
+    is raised during teardown.
     """
     return PytestAsyncioError(
         f"The {phase} of async fixture {request.fixturename!r} was cancelled."
