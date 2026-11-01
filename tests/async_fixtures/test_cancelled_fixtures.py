@@ -63,8 +63,11 @@ def test_cancelled_setup_of_module_scoped_fixture_is_setup_error_of_each_test(
         import pytest
         import pytest_asyncio
 
+        set_up = []
+
         @pytest_asyncio.fixture(scope="module")
         async def cancelled_setup():
+            set_up.append("cancelled_setup")
             task = asyncio.create_task(asyncio.sleep(3600))
             task.cancel()
             await task
@@ -77,9 +80,12 @@ def test_cancelled_setup_of_module_scoped_fixture_is_setup_error_of_each_test(
         @pytest.mark.asyncio(loop_scope="module")
         async def test_second(cancelled_setup):
             pass
+
+        def test_fixture_was_set_up_once():
+            assert set_up == ["cancelled_setup"]
         """))
     result = pytester.runpytest("--asyncio-mode=strict")
-    result.assert_outcomes(errors=2)
+    result.assert_outcomes(passed=1, errors=2)
     result.stdout.fnmatch_lines(
         [
             "*ERROR at setup of test_first*",
