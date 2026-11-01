@@ -46,8 +46,10 @@ def test_cancelled_teardown_does_not_prevent_teardown_of_other_fixtures(
             "*ERROR at teardown of test_requests_fixtures*",
             "E*CancelledError",
             "The above exception was the direct cause of the following exception:",
-            "*PytestAsyncioError: The teardown of async fixture "
-            "'cancelled_teardown' was cancelled.",
+            (
+                "*PytestAsyncioError: The teardown of async fixture "
+                "'cancelled_teardown' was cancelled."
+            ),
         ]
     )
 
@@ -89,10 +91,14 @@ def test_cancelled_setup_of_module_scoped_fixture_is_setup_error_of_each_test(
     result.stdout.fnmatch_lines(
         [
             "*ERROR at setup of test_first*",
-            "*PytestAsyncioError: The setup of async fixture "
-            "'cancelled_setup' was cancelled.",
+            (
+                "*PytestAsyncioError: The setup of async fixture "
+                "'cancelled_setup' was cancelled."
+            ),
             "*ERROR at setup of test_second*",
-            "*PytestAsyncioError: The setup of async fixture "
-            "'cancelled_setup' was cancelled.",
+            (
+                "*PytestAsyncioError: The setup of async fixture "
+                "'cancelled_setup' was cancelled."
+            ),
         ]
     )
